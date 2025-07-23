@@ -1,0 +1,8 @@
+# Ignore node_modules in both frontend and backend
+localchat-frontend/node_modules
+localchat-backend/node_modules
+
+# Optional ignores
+*.env
+.DS_Store
+*.log
