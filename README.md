@@ -70,8 +70,7 @@ Make sure Ollama is installed and Mistral model is running:
 
 ollama run mistral
 📁 Project Structure
-Copy
-Edit
+
 ├── localchat-frontend
 │   ├── components/
 │   ├── App.js
@@ -82,6 +81,9 @@ Edit
 │   ├── models/
 │   └── app.js
 └── README.md
+
+<img width="255" height="271" alt="image" src="https://github.com/user-attachments/assets/bc3ca108-cb59-4dff-960e-9037ce4e4e4f" />
+
 ## 🔮 Future Work
 
 - ⚡ **LLM Latency Optimization**  
