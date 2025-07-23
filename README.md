@@ -87,7 +87,7 @@ ollama run mistral
 
 Working Video :-
 
-https://youtu.be/WAE0RUA_JkE
+[![Watch the demo](https://img.youtube.com/vi/WAE0RUA_JkE/hqdefault.jpg)](https://youtu.be/WAE0RUA_JkE)
 
 ## 🔮 Future Work
 
