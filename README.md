@@ -84,6 +84,11 @@ ollama run mistral
 
 <img width="255" height="271" alt="image" src="https://github.com/user-attachments/assets/bc3ca108-cb59-4dff-960e-9037ce4e4e4f" />
 
+
+Working Video :-
+
+https://youtu.be/WAE0RUA_JkE
+
 ## 🔮 Future Work
 
 - ⚡ **LLM Latency Optimization**  
