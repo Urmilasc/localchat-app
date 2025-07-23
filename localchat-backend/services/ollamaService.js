@@ -3,7 +3,7 @@ const axios = require('axios');
 const getOllamaResponse = async (prompt) => {
   try {
     const response = await axios.post('http://127.0.0.1:11434/api/generate', {
-      model: 'llama2:7b',
+      model: 'mistral',
       prompt: prompt,
       stream: false,
     });

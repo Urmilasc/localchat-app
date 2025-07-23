@@ -93,5 +93,33 @@ const getMessagesByChatId = async (req, res) => {
 };
 
 
+// Rename a chat
+const renameChat = async (req, res) => {
+  const { chatId } = req.params;
+  const { newTitle } = req.body;
 
-module.exports = { createNewChat, sendMessageToChat, getAllChats , getMessagesByChatId};
+  try {
+    const result = await pool.query(
+      'UPDATE chats SET title = $1 WHERE id = $2 RETURNING *',
+      [newTitle, chatId]
+    );
+    res.json(result.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to rename chat' });
+  }
+};
+
+// Delete a chat
+const deleteChat = async (req, res) => {
+  const { chatId } = req.params;
+
+  try {
+    await pool.query('DELETE FROM messages WHERE chat_id = $1', [chatId]);
+    await pool.query('DELETE FROM chats WHERE id = $1', [chatId]);
+    res.json({ message: 'Chat deleted' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete chat' });
+  }
+};
+
+module.exports = { createNewChat, sendMessageToChat, getAllChats , getMessagesByChatId, renameChat,deleteChat };

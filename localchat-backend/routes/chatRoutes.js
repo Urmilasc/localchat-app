@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const {createNewChat } = require('../controllers/chatController');
-const { sendMessageToChat} = require('../controllers/chatController');
-const {getAllChats} = require('../controllers/chatController');
-const {getMessagesByChatId} = require('../controllers/chatController');
+const chatController = require('../controllers/chatController'); // ✅ Use object import
 
-
+// Test route
 router.get('/test', (req, res) => {
   res.json({ message: 'API Working!' });
 });
 
-router.post('/chat' , createNewChat);
+// Chat routes using the controller object
+router.post('/chat', chatController.createNewChat);
+router.post('/chat/:chatId/message', chatController.sendMessageToChat);
+router.get('/chats', chatController.getAllChats);
+router.get('/chat/:chatId', chatController.getMessagesByChatId);
 
-router.post('/chat/:chatId/message', sendMessageToChat);
-router.get('/chats', getAllChats);
-router.get('/chat/:chatId', getMessagesByChatId);
+// ✅ Rename and delete routes
+router.put('/:chatId/rename', chatController.renameChat);
+router.delete('/:chatId', chatController.deleteChat);
 
 module.exports = router;

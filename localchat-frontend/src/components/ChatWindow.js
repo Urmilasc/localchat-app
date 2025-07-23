@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const ChatWindow = ({ selectedChatId, onTitleUpdated }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [isAssistantTyping, setIsAssistantTyping] = useState(false);
+
+  const textareaRef = useRef(null);
 
   // Fetch messages when chatId changes
   useEffect(() => {
@@ -23,6 +26,8 @@ const ChatWindow = ({ selectedChatId, onTitleUpdated }) => {
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
+    setIsAssistantTyping(true);
+
     try {
       const response = await fetch(`/api/chat/${selectedChatId}/message`, {
         method: 'POST',
@@ -32,7 +37,6 @@ const ChatWindow = ({ selectedChatId, onTitleUpdated }) => {
 
       const data = await response.json();
 
-      // Append user and assistant messages
       setMessages((prev) => [
         ...prev,
         { role: 'user', content: input },
@@ -41,12 +45,13 @@ const ChatWindow = ({ selectedChatId, onTitleUpdated }) => {
 
       setInput('');
 
-      // 🔄 Trigger chat list refresh if this is the first message
       if (onTitleUpdated && messages.length === 0) {
         onTitleUpdated();
       }
     } catch (error) {
       console.error('Error sending message:', error);
+    } finally {
+      setIsAssistantTyping(false);
     }
   };
 
@@ -56,6 +61,28 @@ const ChatWindow = ({ selectedChatId, onTitleUpdated }) => {
       handleSendMessage();
     }
   };
+
+  // Global shortcuts
+  useEffect(() => {
+    const handleGlobalKey = (e) => {
+      // Focus textarea on `/`
+      if (e.key === '/' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        textareaRef.current?.focus();
+      }
+
+      // Ctrl+N or Cmd+N to start new chat (if allowed)
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+        e.preventDefault();
+        if (onTitleUpdated && messages.length === 0) {
+          onTitleUpdated(); // Reuse title update for "new chat"
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKey);
+    return () => window.removeEventListener('keydown', handleGlobalKey);
+  }, [messages, onTitleUpdated]);
 
   if (!selectedChatId) {
     return (
@@ -80,10 +107,15 @@ const ChatWindow = ({ selectedChatId, onTitleUpdated }) => {
             {msg.content}
           </div>
         ))}
+
+        {isAssistantTyping && (
+          <div className="italic text-gray-500">Assistant is typing...</div>
+        )}
       </div>
 
       <div className="mt-4 flex">
         <textarea
+          ref={textareaRef}
           rows="2"
           value={input}
           onChange={(e) => setInput(e.target.value)}

@@ -28,7 +28,7 @@ function App() {
       <div className="w-1/4 bg-gray-100 p-4 border-r overflow-y-auto">
         <h1 className="text-2xl font-semibold text-gray-800 mb-4">💬 LocalChat</h1>
         <NewChatForm onChatCreated={handleChatCreated} />
-        <ChatList chats={chats} onSelectChat={setSelectedChatId} />
+        <ChatList chats={chats} onSelectChat={setSelectedChatId} selectedChatId={selectedChatId} fetchChats={fetchChats} />
       </div>
 
       <div className="flex-1 p-4">
